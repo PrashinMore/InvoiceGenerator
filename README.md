@@ -119,13 +119,83 @@ InvoiceGenerator/
 npm run build
 ```
 
-This creates an optimized production build. To start the production server:
+This creates an optimized production build. The static export will be in the `out` folder.
 
-```bash
-npm start
-```
+## Deployment to GitHub Pages
 
-The production build will be in the `.next` folder.
+This project is configured for GitHub Pages deployment. There are two methods:
+
+### Method 1: Automatic Deployment (Recommended)
+
+The project includes a GitHub Actions workflow that automatically deploys on every push to `main` or `master` branch.
+
+1. **Enable GitHub Pages in your repository:**
+   - Go to your repository on GitHub
+   - Navigate to **Settings** → **Pages**
+   - Under **Source**, select **GitHub Actions**
+
+2. **Push your code:**
+   ```bash
+   git add .
+   git commit -m "Configure for GitHub Pages"
+   git push origin main
+   ```
+
+3. **Wait for deployment:**
+   - Go to **Actions** tab in your repository
+   - The workflow will build and deploy automatically
+   - Your site will be available at `https://username.github.io/repository-name/`
+
+### Method 2: Manual Deployment
+
+1. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+2. **Build the project:**
+   ```bash
+   npm run build
+   ```
+   This creates an `out` folder with static files.
+
+3. **Deploy to gh-pages branch:**
+   ```bash
+   npm run deploy
+   ```
+
+4. **Configure GitHub Pages:**
+   - Go to **Settings** → **Pages**
+   - Select **Deploy from a branch**
+   - Choose `gh-pages` branch and `/ (root)` folder
+
+### Important: Base Path Configuration
+
+If your repository name is NOT the same as your GitHub username (e.g., `username.github.io`), you need to set the base path:
+
+1. **Update `next.config.js`:**
+   ```js
+   const nextConfig = {
+     output: 'export',
+     basePath: '/your-repo-name',  // Replace with your actual repo name
+     assetPrefix: '/your-repo-name/',
+     images: {
+       unoptimized: true,
+     },
+   }
+   ```
+
+2. **Rebuild and redeploy:**
+   ```bash
+   npm run build
+   npm run deploy
+   ```
+
+### Troubleshooting
+
+- **Blank page or broken CSS/JS:** Check that `basePath` matches your repository name
+- **404 errors:** Ensure GitHub Pages is enabled and pointing to the correct branch/folder
+- **Build fails:** Check that all dependencies are installed and Next.js version is compatible
 
 ## License
 

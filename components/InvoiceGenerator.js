@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-import './InvoiceGenerator.css';
 
 const InvoiceGenerator = () => {
   // Generate invoice number
