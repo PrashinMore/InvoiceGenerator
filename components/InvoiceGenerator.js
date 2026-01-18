@@ -43,6 +43,9 @@ const InvoiceGenerator = () => {
   const [notes, setNotes] = useState('Thank you for your business!');
   const [paymentInstructions, setPaymentInstructions] = useState('');
 
+  // Share hooks state
+  const [showShareHooks, setShowShareHooks] = useState(false);
+
   // Load from localStorage on mount (client-side only)
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -312,7 +315,21 @@ const InvoiceGenerator = () => {
       const imgHeightFinal = imgHeight * ratio;
       
       pdf.addImage(imgData, 'PNG', 0, 0, imgWidthFinal, imgHeightFinal);
+      
+      // Add watermark at the bottom
+      pdf.setFontSize(8);
+      pdf.setTextColor(150, 150, 150);
+      pdf.text('Created using FreeInvoice.app', pdfWidth / 2, pdfHeight - 5, { align: 'center' });
+      
       pdf.save(`Invoice-${invoiceNumber}.pdf`);
+      
+      // Show share hooks after successful download
+      setShowShareHooks(true);
+      
+      // Auto-hide after 10 seconds
+      setTimeout(() => {
+        setShowShareHooks(false);
+      }, 10000);
     } catch (error) {
       console.error('Error generating PDF:', error);
       alert('Error generating PDF. Please try again.');
@@ -723,6 +740,72 @@ const InvoiceGenerator = () => {
           </div>
         </div>
       </div>
+
+      {/* Share Hooks - shown after PDF download */}
+      {showShareHooks && (
+        <div className="share-hooks-container">
+          <div className="share-hooks">
+            <h3>📤 Share this tool with others!</h3>
+            <p>Know someone who needs to create invoices? Share this free tool!</p>
+            <div className="share-buttons">
+              <button
+                onClick={() => {
+                  const url = window.location.href;
+                  if (navigator.share) {
+                    navigator.share({
+                      title: 'Free Invoice Generator - No Login Required',
+                      text: 'Create professional invoices online for free. No login, no signup required!',
+                      url: url
+                    });
+                  } else {
+                    navigator.clipboard.writeText(url);
+                    alert('Link copied to clipboard!');
+                  }
+                }}
+                className="share-btn"
+              >
+                📤 Share with a friend
+              </button>
+              <button
+                onClick={() => {
+                  if (window.sidebar && window.sidebar.addPanel) {
+                    window.sidebar.addPanel(document.title, window.location.href, '');
+                  } else {
+                    alert('Press Ctrl+D (Cmd+D on Mac) to bookmark this page');
+                  }
+                }}
+                className="share-btn"
+              >
+                🔖 Bookmark this page
+              </button>
+              <button
+                onClick={() => {
+                  const url = window.location.href;
+                  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent('Check out this free invoice generator - no login required! ' + url)}`, '_blank');
+                }}
+                className="share-btn"
+              >
+                🐦 Share on Twitter
+              </button>
+              <button
+                onClick={() => {
+                  const url = window.location.href;
+                  window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`, '_blank');
+                }}
+                className="share-btn"
+              >
+                💼 Share on LinkedIn
+              </button>
+            </div>
+            <button
+              onClick={() => setShowShareHooks(false)}
+              className="share-close"
+            >
+              ✕ Close
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* SEO Landing Content */}
       <div className="seo-content">
