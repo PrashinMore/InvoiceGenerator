@@ -629,6 +629,37 @@
   line-height: 1.7;
 }
 
+.seo-keywords {
+  margin-bottom: 60px;
+  background: #f8f9fa;
+  padding: 40px;
+  border-radius: 12px;
+}
+
+.seo-keywords h2 {
+  font-size: 28px;
+  color: #333;
+  margin-bottom: 25px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.keywords-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.keywords-content p {
+  font-size: 16px;
+  color: #555;
+  line-height: 1.8;
+  margin-bottom: 20px;
+}
+
+.keywords-content p:last-child {
+  margin-bottom: 0;
+}
+
 .seo-cta {
   text-align: center;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
